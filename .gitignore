@@ -8,7 +8,6 @@ fuzz-testing
 *.gcno
 *.gcda
 
-build
 build_coverage
 clang_analyze_build
 

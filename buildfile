@@ -14,7 +14,7 @@ libue{nlohmann_json} : ./include/nlohmann/{hxx}{**} \
 
 # TODO: benchmarks
 
-./test/src
+./test/src/
 {
   for t : cxx{*}
   {
