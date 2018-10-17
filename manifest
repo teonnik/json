@@ -1,0 +1,9 @@
+: 1
+name: nlohmann_json
+version: 3.3.0
+summary: JSON for Modern C++
+license: MIT
+url: https://nlohmann.github.io/json/
+email: TODO
+depends: * build2 >= 0.8.0-
+depends: * bpkg >= 0.8.0-
