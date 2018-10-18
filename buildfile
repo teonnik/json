@@ -1,29 +1,44 @@
-./ : doc{LICENSE.MIT README.md} manifest
+./ : lib{nlohmann_json} doc{LICENSE.MIT README.md} manifest test/
 
+# Header-only library.
+#
+lib{nlohmann_json}: include/nlohmann/hxx{**}
 
-lib{nlohmann_json} : ./include/nlohmann/{hxx}{**}
-lib{nlohmann_json} : install = include/nlohmann_json
+cxx.poptions =+ "-I$src_root/include"
+lib{nlohmann_json}: cxx.export.poptions = "-I$src_root"
 
-# TODO: Should install to `include/nlohmann_json` but may potentially conflict 
-#       with the non-single-header distribution method (i.e. above) 
-lib{nlohmann_json_single} : ./single_include/nlohmann/{hxx}{*}
-lib{nlohmann_json_single} : install = include/nlohmann_json_single
+# Install headers into the nlohmann/ subdirectory of, say, /usr/include/
+# recreating subdirectories.
+#
+include/nlohmann/hxx{*}: install         = include/nlohmann/
+include/nlohmann/hxx{*}: install.subdirs = true
 
-libue{nlohmann_json} : ./include/nlohmann/{hxx}{**} \
-                  ./test/thirdparty/catch/{hxx}{catch}
+# TODO: port Google Benchmarks 
+# Benhcmarks
+#
+#benchmarks/
+#{
+#  exe{json_benchmarks} : src/cxx{benchmarks}
+#}
 
-# TODO: benchmarks
-
-./test/src/
+# Unit tests.
+#
+test/
 {
-  for t : cxx{*}
-  {
-    n = $name($t) 
-  
-    ./ : exe{$n}
-    exe{$n} : test = true
-    exe{$n} : install = false
-    exe{$n} : $t libue{nlohmann_json}
-  } 
+ exe{*}: test = true
+ exe{*}: install = false  
+ 
+ for t: src/cxx{unit-*}
+ {
+   n = $name($t)        
+   ./: exe{$n}
+   exe{$n}: $t src/cxx{unit}
+ }  
+ 
+ cxx.poptions =+ "-I$src_base/thirdparty/catch"
+ cxx.poptions =+ "-I$src_base/thirdparty/fifo_map"  
+ 
+ # Include into distribution.
+ #
+ ./: data/file{**} thirdparty/file{**}
 }
-
