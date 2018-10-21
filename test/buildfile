@@ -1,0 +1,4 @@
+./: src/ data/file{**} thirdparty/file{**}
+
+cxx.poptions =+ "-I$src_base/thirdparty/catch"
+cxx.poptions =+ "-I$src_base/thirdparty/fifo_map"  

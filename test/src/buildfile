@@ -1,0 +1,11 @@
+# Unit tests.
+#
+exe{*}: test = true
+exe{*}: install = false  
+
+for t: cxx{unit-*}
+{
+  n = $name($t)        
+  ./: exe{$n}
+  exe{$n}: $t cxx{unit}
+}
