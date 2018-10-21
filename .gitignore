@@ -21,3 +21,6 @@ benchmarks/files/numbers/*.json
 cmake-build-debug
 
 test/test-*
+
+# build2
+.bdep
