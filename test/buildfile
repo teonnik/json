@@ -15,5 +15,3 @@ if ($cxx.class == 'msvc')
 
 # Fifo Map
 cxx.poptions =+ "-I$src_base/thirdparty/fifo_map"  
-
-info $cxx.poptions

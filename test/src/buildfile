@@ -10,7 +10,8 @@ for t: cxx{unit-*}
 {
   n = $name($t)        
   ./: exe{$n}
-  exe{$n}: $src_root/test/liba{catch_main} \
+  exe{$n}: $t \
+           $src_root/test/liba{catch_main} \
            $src_root/lib{nlohmann_json}
   # exe{$n}: liba{catch_main} lib{nlohmann_json}
 }
