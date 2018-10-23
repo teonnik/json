@@ -1,3 +1,6 @@
+#include $src_root
+#include $src_root/test/
+
 # Unit tests.
 #
 exe{*}: test = true
@@ -7,5 +10,7 @@ for t: cxx{unit-*}
 {
   n = $name($t)        
   ./: exe{$n}
-  exe{$n}: $t cxx{unit}
+  exe{$n}: $src_root/test/liba{catch_main} \
+           $src_root/lib{nlohmann_json}
+  # exe{$n}: liba{catch_main} lib{nlohmann_json}
 }

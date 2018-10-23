@@ -1,4 +1,19 @@
 ./: src/ data/file{**} thirdparty/file{**}
 
-cxx.poptions =+ "-I$src_base/thirdparty/catch"
+# Catch2
+liba{catch_main}: src/cxx{unit} 
+liba{catch_main}: cxx.poptions = "-DCATCH_CONFIG_FAST_COMPILE"
+liba{catch_main}: cxx.export.poptions = "-I$src_base/thirdparty/catch"
+
+if ($cxx.class == 'msvc') 
+{
+  liba{catch_main}: cxx.poptions += "-D_SCL_SECURE_NO_WARNINGS"
+  liba{catch_main}: cxx.coptions += "/EHsc" "/W4" "/wd4389" "/wd4309" \ 
+                                    "/wd4566" "/wd4996"
+}
+#cxx.poptions =+ "-I$src_base/thirdparty/catch"
+
+# Fifo Map
 cxx.poptions =+ "-I$src_base/thirdparty/fifo_map"  
+
+info $cxx.poptions
