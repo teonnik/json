@@ -36,6 +36,7 @@ for t: cxx{unit-*}
 {
   n = $name($t)        
   ./: exe{$n}
-  exe{$n}: $t obj{catch_main} $src_root/lib{nlohmann_json} 
-  exe{$n}: cxx.coptions += $test_flags
+  obj{$n}: $t $src_root/lib{nlohmann_json} 
+  obj{$n}: cxx.coptions += $test_flags
+  exe{$n}: obj{catch_main} obj{$n}
 }
