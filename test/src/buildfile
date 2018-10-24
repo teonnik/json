@@ -1,5 +1,19 @@
-#include $src_root
-#include $src_root/test/
+include $src_root
+
+cxx.poptions =+ "-I$src_root/test/thirdparty/catch"
+cxx.poptions =+ "-I$src_root/test/thirdparty/fifo_map"  
+
+# Catch2 main().
+# 
+obj{catch_main}: cxx{unit} 
+obj{catch_main}: cxx.poptions += "-DCATCH_CONFIG_FAST_COMPILE"
+
+if ($cxx.class == 'msvc') 
+{
+  obj{catch_main}: cxx.poptions += "-D_SCL_SECURE_NO_WARNINGS"
+  obj{catch_main}: cxx.coptions += "/EHsc" "/W4" "/wd4389" "/wd4309" \ 
+                                    "/wd4566" "/wd4996"
+}
 
 # Unit tests.
 #
@@ -10,8 +24,5 @@ for t: cxx{unit-*}
 {
   n = $name($t)        
   ./: exe{$n}
-  exe{$n}: $t \
-           $src_root/test/liba{catch_main} \
-           $src_root/lib{nlohmann_json}
-  # exe{$n}: liba{catch_main} lib{nlohmann_json}
+  exe{$n}: $t obj{catch_main} $src_root/lib{nlohmann_json} 
 }
