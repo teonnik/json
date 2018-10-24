@@ -1,5 +1,7 @@
 include $src_root
 
+is_msvc = ($cxx.class == 'msvc')  
+
 cxx.poptions =+ "-I$src_root/test/thirdparty/catch"
 cxx.poptions =+ "-I$src_root/test/thirdparty/fifo_map"  
 
@@ -8,7 +10,7 @@ cxx.poptions =+ "-I$src_root/test/thirdparty/fifo_map"
 obj{catch_main}: cxx{unit} 
 obj{catch_main}: cxx.poptions += "-DCATCH_CONFIG_FAST_COMPILE"
 
-if ($cxx.class == 'msvc') 
+if $is_msvc
 {
   obj{catch_main}: cxx.poptions += "-D_SCL_SECURE_NO_WARNINGS"
   obj{catch_main}: cxx.coptions += "/EHsc" "/W4" "/wd4389" "/wd4309" \ 
@@ -20,9 +22,20 @@ if ($cxx.class == 'msvc')
 exe{*}: test = true
 exe{*}: install = false  
 
+test_flags =
+if $is_msvc
+  test_flags = "/EHsc" "/Od" 
+else 
+{
+  test_flags = "-Wno-deprecated" "-Wno-float-equal"
+  if ($cxx.class == 'gcc')
+    test_flags += "-Wno-deprecated-declarations"
+}
+
 for t: cxx{unit-*}
 {
   n = $name($t)        
   ./: exe{$n}
   exe{$n}: $t obj{catch_main} $src_root/lib{nlohmann_json} 
+  exe{$n}: cxx.coptions += $test_flags
 }
