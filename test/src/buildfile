@@ -13,8 +13,7 @@ obj{catch_main}: cxx.poptions += "-DCATCH_CONFIG_FAST_COMPILE"
 if $is_msvc
 {
   obj{catch_main}: cxx.poptions += "-D_SCL_SECURE_NO_WARNINGS"
-  obj{catch_main}: cxx.coptions += "/EHsc" "/W4" "/wd4389" "/wd4309" \ 
-                                    "/wd4566" "/wd4996"
+  obj{catch_main}: cxx.coptions += "/EHsc" "/W4" "/wd4389" "/wd4309" "/wd4566" "/wd4996"
 }
 
 # Unit tests.
